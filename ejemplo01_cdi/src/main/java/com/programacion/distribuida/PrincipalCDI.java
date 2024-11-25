@@ -4,7 +4,7 @@ import com.programacion.distribuida.servicios.StringService;
 import jakarta.enterprise.inject.se.SeContainer;
 import jakarta.enterprise.inject.se.SeContainerInitializer;
 
-public class Principal {
+public class PrincipalCDI {
 
     public static void main(String[] args) {
 
