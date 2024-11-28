@@ -1,6 +1,7 @@
 plugins {
     id("java")
-    id("application")
+    //id("application")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.freefair.lombok") version "8.11"
 }
 
@@ -38,3 +39,32 @@ sourceSets {
         output.setResourcesDir( file("${buildDir}/classes/java/main") )
     }
 }
+
+tasks.shadowJar{
+    //MainClassName("com.programacion.distribuida.PrincipalRest")
+}
+
+tasks.jar {
+
+    manifest {
+
+        attributes(
+
+            mapOf("Main-Class" to "com.programacion.distribuida.PrincipalRest",
+
+               /* "Class-Path" to configurations.runtimeClasspath
+
+                    .get()
+
+                    .joinToString(separator = " ") { file ->
+
+                        "${file.name}"
+
+                    }*/)
+
+        )
+
+    }
+
+}
+

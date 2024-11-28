@@ -90,8 +90,8 @@ public class PrincipalRest {
                         .routing(it -> it
                                 .post("/persona", PrincipalRest::insert)
                                 .get("/persona/{id}", PrincipalRest::searchByID)
-                                .put("/persona/update/{id}", PrincipalRest::update)
-                                .delete("/persona/delete/{id}",PrincipalRest::delete))
+                                .put("/persona/{id}", PrincipalRest::update)
+                                .delete("/persona/{id}",PrincipalRest::delete))
                                 .port(8080)
                                         .build()
                                                 .start();

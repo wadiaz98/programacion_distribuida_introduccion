@@ -5,13 +5,13 @@
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="C:/gradle-7.5" />
-        <option name="gradleJvm" value="21" />
+        <option name="gradleJvm" value="temurin-21" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/ejemplo01_cdi" />
             <option value="$PROJECT_DIR$/ejemplo_jpa" />
+            <option value="$PROJECT_DIR$/ejemplo_quarkus" />
             <option value="$PROJECT_DIR$/ejemplo_rest" />
           </set>
         </option>

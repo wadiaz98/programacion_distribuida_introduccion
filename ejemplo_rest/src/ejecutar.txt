@@ -1,0 +1,10 @@
+root: ejemplo_rest\build\install\ejemplo_rest
+
+bin: ejemplo_rest.bat com.programacion.distribuida.PrincipalRest
+
+root: java -cp lib/* com.programacion.distribuida.principalRest
+
+java - com.programacion.distribuida.principalRest
+
+
+C:\Users\fing.labcom\Desktop\P_distribuida\IntelliJ}\prog-distribuida\ejemplo_rest\build\install\ejemplo_rest\lib>java -jar ejemplo_rest.jar
