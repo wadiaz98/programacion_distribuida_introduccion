@@ -27,10 +27,14 @@ dependencies {
     //REST
     implementation(("io.quarkus:quarkus-rest"))
 
-    //JSOM
+    //JSON
+
     implementation(("io.quarkus:quarkus-rest-jsonb"))
     //JPA
-    implementation("io.quarkus:quarkus-hibernate-orm")
+    implementation("io.quarkus:quarkus-hibernate-orm-panache")
+
+    implementation("io.quarkus:quarkus-jdbc-postgresql")
+    implementation("org.postgresql:postgresql:42.7.4")
 
 }
 
