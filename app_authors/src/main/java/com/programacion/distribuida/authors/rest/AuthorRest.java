@@ -5,11 +5,9 @@ import com.programacion.distribuida.authors.repo.AuthorRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
@@ -25,5 +23,35 @@ public class AuthorRest {
     @GET
     public List<Author> findAll() {
         return repository.findAll().list();
+    }
+
+    @GET
+    @Path("/{id}")
+    public Response findById(@PathParam("id") Integer id){
+        var obj = repository.findByIdOptional(id);
+
+        if( obj.isEmpty()){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }else{
+            return Response.ok(obj.get()).build();
+        }
+    }
+
+    @POST
+    public Response create(Author author) {
+        repository.persist(author);
+        return Response.ok(author).build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    public Response update(@PathParam("id") Integer id, Author author) {
+        var obj = repository.updateBook(id, author);
+
+        if(obj.isEmpty()){
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }else{
+            return Response.ok(obj.get()).build();
+        }
     }
 }
