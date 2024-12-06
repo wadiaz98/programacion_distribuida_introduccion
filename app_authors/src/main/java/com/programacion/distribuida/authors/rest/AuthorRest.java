@@ -54,4 +54,10 @@ public class AuthorRest {
             return Response.ok(obj.get()).build();
         }
     }
+
+    @DELETE
+    @Path("/{id}")
+    public void delete(@PathParam("id") Integer id){
+        repository.deleteById(id);
+    }
 }
