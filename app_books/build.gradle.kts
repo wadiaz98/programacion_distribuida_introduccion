@@ -3,6 +3,7 @@ plugins {
 
     id("io.quarkus") version "3.17.0"
     id("io.freefair.lombok") version "8.11"
+
 }
 
 group = "com.programacion.distribuida"
@@ -30,6 +31,8 @@ dependencies {
     //JSON
 
     implementation(("io.quarkus:quarkus-rest-jsonb"))
+    implementation(("io.quarkus:quarkus-rest-client"))
+    implementation(("io.quarkus:quarkus-rest-client-jsonb"))
     //JPA
     implementation("io.quarkus:quarkus-hibernate-orm-panache")
 
