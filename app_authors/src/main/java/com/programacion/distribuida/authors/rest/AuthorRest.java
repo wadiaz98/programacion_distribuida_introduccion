@@ -8,7 +8,9 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Path("/authors")
@@ -20,6 +22,10 @@ public class AuthorRest {
     @Inject
     AuthorRepository repository;
 
+    @Inject
+    @ConfigProperty(name = "quarkus.http.port")
+    Integer port;
+
     @GET
     public List<Author> findAll() {
         return repository.findAll().list();
@@ -28,12 +34,25 @@ public class AuthorRest {
     @GET
     @Path("/{id}")
     public Response findById(@PathParam("id") Integer id){
+
+        System.out.printf("%s: Servidor: %d\n", LocalDateTime.now(), port);
+
+
         var obj = repository.findByIdOptional(id);
+
+        var ret = new Author();
+
+
+        String txt = String.format("[%d] - %s", port, obj.get().getName());
+        System.out.println(txt);
 
         if( obj.isEmpty()){
             return Response.status(Response.Status.NOT_FOUND).build();
         }else{
-            return Response.ok(obj.get()).build();
+            ret.setId(obj.get().getId());
+            ret.setName(txt);
+            ret.setApellido(obj.get().getApellido());
+            return Response.ok(ret).build();
         }
     }
 

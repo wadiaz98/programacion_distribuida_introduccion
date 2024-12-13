@@ -33,6 +33,10 @@ dependencies {
     implementation(("io.quarkus:quarkus-rest-jsonb"))
     implementation(("io.quarkus:quarkus-rest-client"))
     implementation(("io.quarkus:quarkus-rest-client-jsonb"))
+
+
+    //Balanceador de carga Stork
+    implementation("io.smallrye.stork:stork-service-discovery-consul");
     //JPA
     implementation("io.quarkus:quarkus-hibernate-orm-panache")
 
