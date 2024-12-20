@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@FeignClient(name = "app-authors")
+@FeignClient(name = "app-authors-spring")
 public interface AuthorRestClient {
 
     @GetMapping(path = "/authors/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
