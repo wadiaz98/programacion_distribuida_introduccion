@@ -34,6 +34,8 @@ dependencies {
     implementation(("io.quarkus:quarkus-rest-client"))
     implementation(("io.quarkus:quarkus-rest-client-jsonb"))
 
+    //Registro
+    implementation("io.smallrye.reactive:smallrye-mutiny-vertx-consul-client")
 
     //Balanceador de carga Stork
     implementation("io.smallrye.stork:stork-service-discovery-consul");
@@ -42,6 +44,9 @@ dependencies {
 
     implementation("io.quarkus:quarkus-jdbc-postgresql")
     implementation("org.postgresql:postgresql:42.7.4")
+
+    //Health
+    implementation("io.quarkus:quarkus-smallrye-health")
 }
 
 tasks.withType<JavaCompile> {
