@@ -21,6 +21,12 @@
       </GradleProjectSettings>
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/app_books" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/app_books" />
+            <option value="$PROJECT_DIR$/app_books/app_books" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>
