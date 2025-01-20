@@ -47,6 +47,7 @@ dependencies {
 
     //Health
     implementation("io.quarkus:quarkus-smallrye-health")
+
 }
 
 tasks.withType<JavaCompile> {
