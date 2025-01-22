@@ -30,7 +30,7 @@ dependencies {
 
     //JSON
 
-    implementation(("io.quarkus:quarkus-rest-jsonb"))
+    //implementation(("io.quarkus:quarkus-rest-jsonb"))
     implementation(("io.quarkus:quarkus-rest-client"))
     implementation(("io.quarkus:quarkus-rest-client-jsonb"))
 
@@ -47,6 +47,10 @@ dependencies {
 
     //Health
     implementation("io.quarkus:quarkus-smallrye-health")
+
+    //Metrics
+    implementation("io.quarkus:quarkus-micrometer-registry-prometheus")
+    implementation("io.quarkus:quarkus-jackson")
 
 }
 
