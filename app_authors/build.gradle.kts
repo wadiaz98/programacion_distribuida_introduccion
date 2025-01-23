@@ -47,6 +47,9 @@ dependencies {
     //Metrics
     implementation("io.quarkus:quarkus-micrometer-registry-prometheus")
     implementation("io.quarkus:quarkus-jackson")
+
+    //Telemetry
+    implementation("io.quarkus:quarkus-opentelemetry")
 }
 
 tasks.withType<JavaCompile> {
