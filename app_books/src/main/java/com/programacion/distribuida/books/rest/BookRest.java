@@ -94,11 +94,20 @@ public class BookRest {
     public Response findById(@PathParam("id") Integer id) {
         var obj = repository.findByIdOptional(id);
 
-        if(obj.isEmpty()){
+        if(obj.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).build();
-        } else {
-            return Response.ok(obj.get()).build();
         }
+
+        var book = obj.get();
+        var author = client.findById(book.getAuthorId());
+
+        var dto = new BookDto();
+        dto.setId(book.getId());
+        dto.setIsbn(book.getIsbn());
+        dto.setTittle(book.getTittle());
+        dto.setPrice(book.getPrice());
+        dto.setAuthor(author.getName() + " " + author.getApellido());
+        return Response.ok(dto).build();
     }
 
     @PUT

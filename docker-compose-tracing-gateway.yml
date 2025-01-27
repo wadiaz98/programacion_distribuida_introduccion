@@ -77,6 +77,7 @@ services:
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
       QUARKUS_HIBERNATE-ORM_METRICS_ENABLED: true
+      QUARKUS_OTEL_EXPORTER_OTLP_ENDPOINT: http://jeager:4317
     expose:
       - 8080
     depends_on:
@@ -95,12 +96,13 @@ services:
       QUARKUS_DATASOURCE_USERNAME: postgres
       QUARKUS_DATASOURCE_PASSWORD: postgres
       QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://dbserver:5432/distribuida
-      QUARKUS_HTTP_PORT: 8081
+      QUARKUS_HTTP_PORT: 8080
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
       QUARKUS_HIBERNATE-ORM_METRICS_ENABLED: true
+      QUARKUS_OTEL_EXPORTER_OTLP_ENDPOINT: http://jeager:4317
     expose:
-      - 8081
+      - 8080
     depends_on:
       - dbserver
       - consul

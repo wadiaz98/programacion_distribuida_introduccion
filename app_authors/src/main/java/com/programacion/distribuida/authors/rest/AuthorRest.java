@@ -12,6 +12,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Path("/authors")
 @Produces(MediaType.APPLICATION_JSON)
@@ -26,6 +27,8 @@ public class AuthorRest {
     @ConfigProperty(name = "quarkus.http.port")
     Integer port;
 
+    AtomicInteger counter = new AtomicInteger(1);
+
     @GET
     public List<Author> findAll() {
         return repository.findAll().list();
@@ -34,21 +37,21 @@ public class AuthorRest {
     @GET
     @Path("/{id}")
     public Response findById(@PathParam("id") Integer id){
-
-        System.out.printf("%s: Servidor: %d\n", LocalDateTime.now(), port);
-
+    int value = counter.getAndDecrement();
+    if(value %5 != 0){
+        String msg = String.format("Intento %d ============>error", value);
+        System.out.println("************"+msg);
+        throw new RuntimeException(msg);
+    }
 
         var obj = repository.findByIdOptional(id);
-
-        var ret = new Author();
-
-
-        String txt = String.format("[%d] - %s", port, obj.get().getName());
-        System.out.println(txt);
 
         if( obj.isEmpty()){
             return Response.status(Response.Status.NOT_FOUND).build();
         }else{
+            System.out.printf("%s: Servidor: %d\n", LocalDateTime.now(), port);
+            String txt = String.format("[%d] - %s", port, obj.get().getName());
+            var ret = new Author();
             ret.setId(obj.get().getId());
             ret.setName(txt);
             ret.setApellido(obj.get().getApellido());

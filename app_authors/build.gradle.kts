@@ -50,6 +50,7 @@ dependencies {
 
     //Telemetry
     implementation("io.quarkus:quarkus-opentelemetry")
+
 }
 
 tasks.withType<JavaCompile> {
