@@ -40,6 +40,7 @@ services:
       --tracing.otlp=true
       --tracing.otlp.http=true
       --tracing.otlp.http.endpoint=http://jeager:4318
+
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
@@ -50,6 +51,7 @@ services:
       - 80
     depends_on:
       - consul
+
   jeager:
     image: jaegertracing/jaeger:2.2.0
     ports:
@@ -78,6 +80,7 @@ services:
       CONSUL_PORT: 8500
       QUARKUS_HIBERNATE-ORM_METRICS_ENABLED: true
       QUARKUS_OTEL_EXPORTER_OTLP_ENDPOINT: http://jeager:4317
+
     expose:
       - 8080
     depends_on:
@@ -101,6 +104,11 @@ services:
       CONSUL_PORT: 8500
       QUARKUS_HIBERNATE-ORM_METRICS_ENABLED: true
       QUARKUS_OTEL_EXPORTER_OTLP_ENDPOINT: http://jeager:4317
+      QUARKUS_HTTP_CORS: true
+      QUARKUS_HTTP_CORS_ORIGINS: /.*/
+      QUARKUS_HTTP_CORS_METHODS: GET,PUT,POST,DELETE
+      QUARKUS_HTTP_CORS_HEADERS: X-Custom
+      QUARKUS_HTTP_CORS_EXPOSED_HEADERS: Content-Disposition
     expose:
       - 8080
     depends_on:
