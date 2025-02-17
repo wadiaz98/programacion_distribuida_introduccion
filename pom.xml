@@ -6,10 +6,10 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>app_books_spring</module>
-        <module>spring_app_authors</module>
-    </modules>
+<!--    <modules>-->
+<!--        <module>app_books_spring</module>-->
+<!--        <module>spring_app_authors</module>-->
+<!--    </modules>-->
 
     <dependencyManagement>
         <dependencies>

@@ -19,6 +19,9 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.util.List;
 
+//Open Api
+
+
 @Path("/books")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)

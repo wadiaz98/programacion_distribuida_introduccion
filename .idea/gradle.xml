@@ -10,13 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app_authors" />
             <option value="$PROJECT_DIR$/app_books" />
-            <option value="$PROJECT_DIR$/app_books_spring" />
             <option value="$PROJECT_DIR$/configs" />
-            <option value="$PROJECT_DIR$/ejemplo01_cdi" />
-            <option value="$PROJECT_DIR$/ejemplo_jpa" />
-            <option value="$PROJECT_DIR$/ejemplo_quarkus" />
-            <option value="$PROJECT_DIR$/ejemplo_rest" />
-            <option value="$PROJECT_DIR$/spring_app_authors" />
           </set>
         </option>
       </GradleProjectSettings>
