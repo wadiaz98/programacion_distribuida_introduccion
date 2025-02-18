@@ -28,7 +28,7 @@ dependencies {
     implementation(("io.quarkus:quarkus-rest"))
 
     //JSON
-    //implementation(("io.quarkus:quarkus-rest-jsonb"))
+    implementation(("io.quarkus:quarkus-rest-jsonb"))
     //JPA
     implementation("io.quarkus:quarkus-hibernate-orm-panache")
 
@@ -46,7 +46,7 @@ dependencies {
 
     //Metrics
 //    implementation("io.quarkus:quarkus-micrometer-registry-prometheus")
-//    implementation("io.quarkus:quarkus-jackson")
+      implementation("io.quarkus:quarkus-jackson")
 //
 //    //Telemetry -tracing
 //    implementation("io.quarkus:quarkus-opentelemetry")
@@ -54,9 +54,13 @@ dependencies {
     //fault tolerance
     implementation("io.quarkus:quarkus-smallrye-fault-tolerance")
 
-    //control de versiones DB
+    // Flyway specific dependencies
     implementation("io.quarkus:quarkus-flyway")
+    // Flyway PostgreSQL specific dependencies
     implementation("org.flywaydb:flyway-database-postgresql")
+
+    //Open API
+    implementation("io.quarkus:quarkus-smallrye-openapi")
 
 }
 

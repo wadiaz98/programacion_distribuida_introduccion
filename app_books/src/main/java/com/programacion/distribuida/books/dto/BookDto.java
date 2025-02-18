@@ -11,7 +11,7 @@ public class BookDto {
 
     private String isbn;
 
-    private String tittle;
+    private String title;
 
     private BigDecimal price;
 

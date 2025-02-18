@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Documentación de la API de recursos de Books
-  description: Documento de los recursos de books
+  description: Documento de los recursos de Books
   version: "1.0"
 
 servers:
@@ -15,7 +15,11 @@ paths:
         200:
           description: OK - Libros obtenidos exitosamente
           content:
-            application/json: { }
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookDto'
     post:
       requestBody:
         content:
@@ -26,45 +30,51 @@ paths:
         200:
           description: OK - Nuevo libro creado exitosamente
           content:
-            application/json: { }
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
   /books/{id}:
     get:
       parameters:
         - name: id
           in: path
           required: true
-          description: ID del libro
+          description: ID del libro en DB
           schema:
             type: integer
       responses:
         200:
           description: OK - Libro obtenido exitosamente
           content:
-            application/json: { }
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDto'
     put:
       parameters:
         - name: id
           in: path
           required: true
-          description: ID del libro
+          description: ID del libro en DB
           schema:
             type: integer
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BookDto'
+              $ref: '#/components/schemas/Book'
       responses:
         200:
           description: OK - Libro actualizado exitosamente
           content:
-            application/json: { }
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
     delete:
       parameters:
         - name: id
           in: path
           required: true
-          description: ID del libro
+          description: ID del libro en DB
           schema:
             type: integer
       responses:

@@ -10,8 +10,10 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 @Path("/authors")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-//@RegisterRestClient(configKey = "authors-api")
-@RegisterRestClient(baseUri = "stork://authors-api")
+//ANOTACION PARA QUE SEA EL PROXY AUTOMÁTICO
+//@RegisterRestClient(configKey ="authors-api")
+@RegisterRestClient(baseUri ="stork://authors-api")
+
 public interface AuthorRestClient {
 
     @GET
@@ -20,11 +22,12 @@ public interface AuthorRestClient {
     @Fallback(fallbackMethod = "findByIdFallback")
     AuthorDto findById(@PathParam("id") Integer id);
 
-    default AuthorDto findByIdFallback(Integer id) {
-        AuthorDto ret = new AuthorDto();
-        ret.setId(-1);
-        ret.setName("NoName");
-        ret.setApellido("");
-        return new AuthorDto();
+    default AuthorDto findByIdFallback(Integer id){
+        var dto = new AuthorDto();
+        dto.setId(-1);
+        dto.setName("No");
+        dto.setApellido("Available");
+        return dto;
     }
+
 }

@@ -8,8 +8,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_DB: distribuida
       PG_DATA: /var/lib/postgresql/data/pgdata
-    volumes:
-      - "c:/db-distribuida:/var/lib/postgresql/data"
+#    volumes:
+#      - "c:/db-distribuida:/var/lib/postgresql/data"
     ports:
       - "54321:5432"
     expose:
