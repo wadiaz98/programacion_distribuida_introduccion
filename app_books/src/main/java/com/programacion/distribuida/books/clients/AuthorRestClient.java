@@ -25,8 +25,8 @@ public interface AuthorRestClient {
     default AuthorDto findByIdFallback(Integer id){
         var dto = new AuthorDto();
         dto.setId(-1);
-        dto.setName("No");
-        dto.setApellido("Available");
+        dto.setFirstName("No");
+        dto.setLastName("Available");
         return dto;
     }
 

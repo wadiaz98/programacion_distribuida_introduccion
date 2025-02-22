@@ -2,7 +2,6 @@ package com.programacion.distribuida.books.rest;
 
 import com.programacion.distribuida.books.clients.AuthorRestClient;
 import com.programacion.distribuida.books.db.Book;
-import com.programacion.distribuida.books.dto.AuthorDto;
 import com.programacion.distribuida.books.dto.BookDto;
 import com.programacion.distribuida.books.repo.BookRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -10,11 +9,8 @@ import jakarta.inject.Inject;
 
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.util.List;
@@ -86,7 +82,7 @@ public class BookRest {
             dto.setIsbn(book.getIsbn());
             dto.setTitle(book.getTitle());
             dto.setPrice(book.getPrice());
-            dto.setAuthor(author.getName() + " " + author.getApellido());
+            dto.setAuthor(author.getFirstName() + " " + author.getLastName());
            System.out.println("Libro: "+dto);
             return dto;
         }).toList();
@@ -109,7 +105,7 @@ public class BookRest {
         dto.setIsbn(book.getIsbn());
         dto.setTitle(book.getTitle());
         dto.setPrice(book.getPrice());
-        dto.setAuthor(author.getName() + " " + author.getApellido());
+        dto.setAuthor(author.getFirstName() + " " + author.getLastName());
         return Response.ok(dto).build();
     }
 

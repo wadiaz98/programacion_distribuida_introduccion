@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class AuthorDto {
     private Integer id;
-    private String name;
-    private String apellido;
+    private String firstName;
+    private String lastName;
 }

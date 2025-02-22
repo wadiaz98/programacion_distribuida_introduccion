@@ -28,6 +28,7 @@ public class AuthorRest {
     public Response findById(@PathParam("id") Integer id) {
         var author = repository.findById(id);
         System.out.println("Consultando el autor con id: " + id);
+        System.out.println("Autor encontrado: " + author.toString());
         return author != null ? Response.ok(author).build() : Response.status(Response.Status.NOT_FOUND).build();
     }
 
