@@ -2,7 +2,6 @@ package com.programacion.distribuida.authors.rest;
 
 import com.programacion.distribuida.authors.db.Author;
 import com.programacion.distribuida.authors.repo.AuthorRepository;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -13,8 +12,6 @@ import jakarta.ws.rs.core.Response;
 @Path( "/authors")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Transactional
-@ApplicationScoped
 public class AuthorRest {
 
     @Inject
