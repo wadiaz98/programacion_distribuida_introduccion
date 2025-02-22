@@ -12,6 +12,7 @@ version = "unspecified"
 repositories {
     mavenCentral()
 }
+
 var quarkusVersion = "3.17.0"
 
 java {
@@ -58,8 +59,15 @@ dependencies {
     //Fault Tolerance
     implementation("io.quarkus:quarkus-smallrye-fault-tolerance")
 
+    // Flyway specific dependencies
+    implementation("io.quarkus:quarkus-flyway")
+    // Flyway PostgreSQL specific dependencies
+    implementation("org.flywaydb:flyway-database-postgresql")
+
     //Open API
     implementation("io.quarkus:quarkus-smallrye-openapi")
+
+
 
 }
 

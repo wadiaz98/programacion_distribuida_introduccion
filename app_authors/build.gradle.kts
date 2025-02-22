@@ -20,22 +20,24 @@ application {
     mainClass.set("com.distribuida.Main")
 }
 
+var helidonVersion = "4.1.6"
+
 dependencies {
 
-    implementation(platform("io.helidon:helidon-dependencies:4.0.11"))
+    implementation(platform("io.helidon:helidon-dependencies:${helidonVersion}"))
 
     // Actualiza las dependencias a la versión correspondiente
-    implementation("io.helidon.integrations.cdi:helidon-integrations-cdi-datasource-hikaricp:4.0.11")
-    implementation("io.helidon.microprofile.server:helidon-microprofile-server:4.0.11")
+    implementation("io.helidon.integrations.cdi:helidon-integrations-cdi-datasource-hikaricp:${helidonVersion}")
+    implementation("io.helidon.microprofile.server:helidon-microprofile-server:${helidonVersion}")
     implementation("org.glassfish.jersey.media:jersey-media-json-binding:3.0.0")
 
     runtimeOnly("jakarta.persistence:jakarta.persistence-api:2.2.3")
     runtimeOnly("jakarta.transaction:jakarta.transaction-api:1.3.3")
 
-    runtimeOnly("io.helidon.integrations.cdi:helidon-integrations-cdi-datasource-hikaricp:4.0.11")
-    runtimeOnly("io.helidon.integrations.cdi:helidon-integrations-cdi-hibernate:4.0.11")
-    runtimeOnly("io.helidon.integrations.cdi:helidon-integrations-cdi-jta-weld:4.0.11")
-    runtimeOnly("io.helidon.integrations.cdi:helidon-integrations-cdi-jpa:4.0.11")
+    runtimeOnly("io.helidon.integrations.cdi:helidon-integrations-cdi-datasource-hikaricp:${helidonVersion}")
+    runtimeOnly("io.helidon.integrations.cdi:helidon-integrations-cdi-hibernate:${helidonVersion}")
+    runtimeOnly("io.helidon.integrations.cdi:helidon-integrations-cdi-jta-weld:${helidonVersion}")
+    runtimeOnly("io.helidon.integrations.cdi:helidon-integrations-cdi-jpa:${helidonVersion}")
 
     implementation("org.postgresql:postgresql:42.7.2")
     implementation("org.hibernate:hibernate-core:6.4.4.Final")

@@ -84,11 +84,15 @@ spec:
             - name: QUARKUS_HTTP_CORS
               value: "true"
             - name: QUARKUS_HTTP_CORS_ORIGINS
-              value: "*"
+              value: "http://localhost:*,http://127.0.0.1:*,http://0.0.0.0:*,http://localhost"
             - name: QUARKUS_HTTP_CORS_METHODS
-              value: "GET,POST,PUT,DELETE"
+              value: "GET,POST,PUT,DELETE,OPTIONS"
             - name: QUARKUS_HTTP_CORS_HEADERS
-              value: "Accept,Content-Type,Authorization,X-Requested-With"
+              value: "accept,authorization,content-type,x-requested-with,origin"
+            - name: QUARKUS_HTTP_CORS_EXPOSED_HEADERS
+              value: "content-disposition"
+            - name: QUARKUS_HTTP_CORS_ACCESS_CONTROL_MAX_AGE
+              value: "24H"
       restartPolicy: Always
 ---
 apiVersion: v1
