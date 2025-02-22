@@ -52,6 +52,22 @@ dependencies {
 
     implementation("io.helidon.microprofile:helidon-microprofile-cors")
     implementation("org.jboss:jandex:3.1.6")
+
+
+    implementation("org.eclipse.microprofile.health:microprofile-health-api:4.0")
+    implementation("io.helidon.microprofile.health:helidon-microprofile-health:${helidonVersion}")
+
+    // https://mvnrepository.com/artifact/io.helidon.health/helidon-health
+    implementation("io.helidon.health:helidon-health:4.1.6")
+
+    implementation("io.helidon.health:helidon-health:${helidonVersion}")
+    // https://mvnrepository.com/artifact/io.helidon.health/helidon-health-checks
+    implementation("io.helidon.health:helidon-health-checks:4.1.6")
+
+    // https://mvnrepository.com/artifact/io.helidon.fault-tolerance/helidon-fault-tolerance
+    implementation("io.helidon.fault-tolerance:helidon-fault-tolerance:4.1.6")
+
+
 }
 
 
