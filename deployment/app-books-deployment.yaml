@@ -28,11 +28,11 @@ spec:
               memory: "64Mi"
           env:
             - name: QUARKUS_DATASOURCE_JDBC_URL
-              value: jdbc:postgresql://wadiaz-pgserver.postgres.database.azure.com:5432/distribuida
+              value: jdbc:postgresql://127.0.0.1:5432/distribuida
             - name: QUARKUS_DATASOURCE_USERNAME
               value: distribuida
             - name: QUARKUS_DATASOURCE_PASSWORD
-              value: Root2025
+              value: rc2ijxxz
             - name: QUARKUS_HTTP_PORT
               value: "8080"
             - name: CONSUL_HOST

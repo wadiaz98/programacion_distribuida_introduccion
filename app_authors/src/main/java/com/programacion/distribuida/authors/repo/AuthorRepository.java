@@ -1,27 +1,36 @@
 package com.programacion.distribuida.authors.repo;
 
+
 import com.programacion.distribuida.authors.db.Author;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
-import java.util.Optional;
+
+import java.util.List;
 
 
 @ApplicationScoped
 @Transactional
-public class AuthorRepository implements PanacheRepositoryBase<Author, Integer> {
+public class AuthorRepository {
 
-    public Optional<Author> updateBook(Integer id, Author author) {
-        var obj = this.findByIdOptional(id);
+    @PersistenceContext
+    private EntityManager manager;
 
-        if(obj.isEmpty()){
-            return Optional.empty();
-        }
-
-        var authorObj = obj.get();
-        authorObj.setName(author.getName());
-        authorObj.setApellido(author.getApellido());
-        return Optional.of(authorObj);
+    public void save(Author author) {
+        manager.persist(author);
+    }
+    public Author findById(Integer id) {
+        return manager.find(Author.class, id);
+    }
+    public void update(Author author) {
+        manager.merge(author);
+    }
+    public void delete(Author author) {
+        manager.remove(author);
+    }
+    public List<Author> findAll() {
+        return manager.createQuery("SELECT a FROM Author a", Author.class).getResultList();
     }
 }

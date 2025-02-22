@@ -5,81 +5,62 @@ import com.programacion.distribuida.authors.repo.AuthorRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-@Path("/authors")
+@Path( "/authors")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@ApplicationScoped
 @Transactional
+@ApplicationScoped
 public class AuthorRest {
-    @Inject
-    AuthorRepository repository;
 
     @Inject
-    @ConfigProperty(name = "quarkus.http.port")
-    Integer port;
+    private AuthorRepository repository;
 
-    AtomicInteger counter = new AtomicInteger(1);
 
     @GET
-    public List<Author> findAll() {
-        return repository.findAll().list();
+    public Response findAll() {
+        return Response.ok(repository.findAll()).build();
     }
 
     @GET
     @Path("/{id}")
-    public Response findById(@PathParam("id") Integer id){
-    int value = counter.getAndDecrement();
-    if(value %5 != 0){
-        String msg = String.format("Intento %d ============>error", value);
-        System.out.println("************"+msg);
-        throw new RuntimeException(msg);
-    }
-
-        var obj = repository.findByIdOptional(id);
-
-        if( obj.isEmpty()){
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }else{
-            System.out.printf("%s: Servidor: %d\n", LocalDateTime.now(), port);
-            String txt = String.format("[%d] - %s", port, obj.get().getName());
-            var ret = new Author();
-            ret.setId(obj.get().getId());
-            ret.setName(txt);
-            ret.setApellido(obj.get().getApellido());
-            return Response.ok(ret).build();
-        }
-    }
-
-    @POST
-    public Response create(Author author) {
-        repository.persist(author);
-        return Response.ok(author).build();
+    public Response findById(@PathParam("id") Integer id) {
+        var author = repository.findById(id);
+        System.out.println("Consultando el autor con id: " + id);
+        return author != null ? Response.ok(author).build() : Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Integer id, Author author) {
-        var obj = repository.updateBook(id, author);
-
-        if(obj.isEmpty()){
+    public Response update(@PathParam("id") Integer id,@Valid Author author) {
+        var authorObj = repository.findById(id);
+        if (authorObj == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
-        }else{
-            return Response.ok(obj.get()).build();
         }
+        author.setId(authorObj.getId());
+        repository.update(author);
+        return Response.ok(author).build();
     }
-
     @DELETE
     @Path("/{id}")
-    public void delete(@PathParam("id") Integer id){
-        repository.deleteById(id);
+    public Response delete(@PathParam("id") Integer id) {
+        var author = repository.findById(id);
+        if (author == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        repository.delete(author);
+        return Response.ok("Deleted author with id: " + id).build();
     }
+
+    @POST
+    public Response create(@Valid Author author) {
+        repository.save(author);
+        return Response.ok(author).build();
+    }
+
+
 }

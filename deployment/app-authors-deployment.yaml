@@ -23,13 +23,17 @@ spec:
             - containerPort: 8080
               protocol: TCP
           env:
-            - name: QUARKUS_DATASOURCE_JDBC_URL
-              value: jdbc:postgresql://wadiaz-pgserver.postgres.database.azure.com:5432/distribuida
-            - name: QUARKUS_DATASOURCE_USERNAME
+            - name: JAVAX_SQL_DATASOURCE_DS1_SERVER_NAME
+              value: 127.0.0.1
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATABASE_NAME
               value: distribuida
-            - name: QUARKUS_DATASOURCE_PASSWORD
-              value: Root2025
-            - name: QUARKUS_HTTP_PORT
+            - name: JAVAX_SQL_DATASOURCE_DS1_PORT_NUMBER
+              value: "5432"
+            - name: JAVAX_SQL_DATASOURCE_DS1_USER
+              value: postgres
+            - name: JAVAX_SQL_DATASOURCE_DS1_PASSWORD
+              value: rc2ijxxz
+            - name: SERVER_PORT
               value: "8080"
             - name: CONSUL_HOST
               value: "consul"

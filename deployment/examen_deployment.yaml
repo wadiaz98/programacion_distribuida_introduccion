@@ -1,0 +1,214 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consul
+  labels:
+    app: consul
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consul
+  template:
+    metadata:
+      name: consul
+      labels:
+        app: consul
+    spec:
+      containers:
+        - name: consul
+          image: consul:1.15.4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8500
+              protocol: TCP
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  labels:
+    app: consul
+spec:
+  selector:
+    app: consul
+  type: NodePort
+  ports:
+    - name: consul
+      port: 8500
+      protocol: TCP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-books
+  labels:
+    app: app-books
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app-books
+  template:
+    metadata:
+      name: app-books
+      labels:
+        app: app-books
+    spec:
+      containers:
+        - name: app-books
+          image: docker.io/willan98/app_books:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+          env:
+            - name: QUARKUS_DATASOURCE_JDBC_URL
+              value: jdbc:postgresql://192.168.100.10:5432/distribuida
+            - name: QUARKUS_DATASOURCE_USERNAME
+              value: postgres
+            - name: QUARKUS_DATASOURCE_PASSWORD
+              value: rc2ijxxz
+            - name: CONSUL_HOST
+              value: consul
+            - name: CONSUL_PORT
+              value: "8500"
+            - name: QUARKUS_HTTP_PORT
+              value: "8080"
+            - name: QUARKUS_HTTP_CORS
+              value: "true"
+            - name: QUARKUS_HTTP_CORS_ORIGINS
+              value: "*"
+            - name: QUARKUS_HTTP_CORS_METHODS
+              value: "GET,POST,PUT,DELETE"
+            - name: QUARKUS_HTTP_CORS_HEADERS
+              value: "Accept,Content-Type,Authorization,X-Requested-With"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-books-services
+spec:
+  type: LoadBalancer
+  selector:
+    app: app-books
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: app-books-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: app-books
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 50
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-authors
+  labels:
+    app: app-authors
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-authors
+  template:
+    metadata:
+      name: app-authors
+      labels:
+        app: app-authors
+    spec:
+      containers:
+        - name: app-authors
+          image: docker.io/willan98/app_authors:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+          env:
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_SERVERNAME
+              value: 192.168.100.10
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_PORTNUMBER
+              value: "5432"
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_DATABASENAME
+              value: distribuida
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_USER
+              value: postgres
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_PASSWORD
+              value: rc2ijxxz
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCECLASSNAME
+              value: org.postgresql.ds.PGSimpleDataSource
+            - name: SERVER_PORT
+              value: "8080"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-authors-services
+spec:
+  type: ClusterIP
+  selector:
+    app: app-authors
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: app-authors-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: app-authors
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 50

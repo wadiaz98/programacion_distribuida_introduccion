@@ -1,14 +1,10 @@
-# docker build -t app_authors .
-# docker build -t willan98/app_authors .
-# docker push willan98/app_authors
-FROM eclipse-temurin:21.0.5_11-jre-alpine
+# docker build -t app_authors_examen .
+# docker build -t docker.io/willan98/app_authors_examen .
+# docker push willan98/app_authors_examen
 
+FROM eclipse-temurin:21.0.5_11-jre-alpine
 RUN mkdir /app
 WORKDIR /app
 
-COPY build/quarkus-app/app ./app
-COPY build/quarkus-app/lib ./lib
-COPY build/quarkus-app/quarkus ./quarkus
-COPY build/quarkus-app/quarkus-run.jar app.jar
-
-CMD ["java", "-jar", "app.jar"]
+COPY build/libs/app_authors.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
