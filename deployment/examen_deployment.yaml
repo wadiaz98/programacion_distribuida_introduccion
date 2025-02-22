@@ -156,7 +156,7 @@ spec:
           image: docker.io/willan98/app_authors:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080
+            - containerPort: 9090
               protocol: TCP
           resources:
             requests:
@@ -176,7 +176,11 @@ spec:
             - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCECLASSNAME
               value: org.postgresql.ds.PGSimpleDataSource
             - name: SERVER_PORT
-              value: "8080"
+              value: "9090"
+            - name: CONSUL_HOST
+              value: consul
+            - name: CONSUL_PORT
+              value: "8500"
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -189,8 +193,8 @@ spec:
     app: app-authors
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
+      port: 9090
+      targetPort: 9090
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler

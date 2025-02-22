@@ -6,27 +6,53 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Initialized;
 import jakarta.enterprise.event.Observes;
 import jakarta.enterprise.context.Destroyed;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import java.net.InetAddress;
+import java.util.Arrays;
+import java.util.UUID;
 
 @ApplicationScoped
 public class ConsulService {
     private String serviceId;
     private ConsulClient consulClient;
 
-    void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
-        String consulHost = System.getProperty("consul.host", "localhost");
-        int consulPort = Integer.parseInt(System.getProperty("consul.port", "8500"));
+    @Inject
+    @ConfigProperty(name="consul.host", defaultValue = "127.0.0.1")
+    String consulIp;
 
-        consulClient = new ConsulClient(consulHost, consulPort);
-        serviceId = "app-authors-" + System.currentTimeMillis();
+    @Inject
+    @ConfigProperty(name="consul.port", defaultValue = "8500")
+    Integer consulPort;
+
+    @Inject
+    @ConfigProperty(name="server.port", defaultValue = "9090")
+    Integer appPort;
+
+    void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws Exception {
+        consulClient = new ConsulClient(consulIp, consulPort);
+        serviceId = "app-authors-" + UUID.randomUUID().toString();
+
+        var ipAddress = InetAddress.getLocalHost();
 
         NewService service = new NewService();
         service.setId(serviceId);
         service.setName("app-authors");
-        service.setPort(9090);
+        service.setAddress(ipAddress.getHostAddress());
+        service.setPort(appPort);
+
+        service.setTags(Arrays.asList(
+                "traefik.enable=true",
+                "traefik.http.routers.router-app-authors.rule=PathPrefix(`/app-authors`)",
+                "traefik.http.routers.router-app-authors.middlewares=middleware-app-authors",
+                "traefik.http.middlewares.middleware-app-authors.stripPrefix.prefixes=/app-authors"
+        ));
 
         NewService.Check check = new NewService.Check();
-        check.setHttp("http://localhost:9090/health");
+        check.setHttp("http://" + ipAddress.getHostAddress() + ":" + appPort + "/health");
         check.setInterval("10s");
+        check.setDeregisterCriticalServiceAfter("20s");
         service.setCheck(check);
 
         consulClient.agentServiceRegister(service);

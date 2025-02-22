@@ -9,4 +9,6 @@ WORKDIR /app
 COPY build/libs/app_authors-1.0-SNAPSHOT.jar app.jar
 COPY build/libs/libs /app/libs
 
+EXPOSE 9090
+
 ENTRYPOINT ["java", "-cp", "app.jar:libs/*", "com.programacion.distribuida.authors.Main"]
