@@ -1,3 +1,4 @@
+# Consul Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,7 +12,6 @@ spec:
       app: consul
   template:
     metadata:
-      name: consul
       labels:
         app: consul
     spec:
@@ -38,8 +38,99 @@ spec:
     - name: consul
       port: 8500
       protocol: TCP
-
 ---
+# Authors Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-authors
+  labels:
+    app: app-authors
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-authors
+  template:
+    metadata:
+      labels:
+        app: app-authors
+    spec:
+      initContainers:
+        - name: wait-for-consul
+          image: busybox
+          command: ['sh', '-c', 'until wget -qO- http://consul:8500/v1/status/leader; do echo waiting for consul; sleep 2; done;']
+      containers:
+        - name: app-authors
+          image: docker.io/willan98/app_authors:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9090
+              protocol: TCP
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+          env:
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_SERVERNAME
+              value: 192.168.100.10
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_PORTNUMBER
+              value: "5432"
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_DATABASENAME
+              value: distribuida
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_USER
+              value: postgres
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_PASSWORD
+              value: rc2ijxxz
+            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCECLASSNAME
+              value: org.postgresql.ds.PGSimpleDataSource
+            - name: SERVER_PORT
+              value: "9090"
+            - name: CONSUL_HOST
+              value: consul
+            - name: CONSUL_PORT
+              value: "8500"
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-authors-services
+spec:
+  type: ClusterIP
+  selector:
+    app: app-authors
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: app-authors-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: app-authors
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 50
+---
+# Books Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -53,10 +144,16 @@ spec:
       app: app-books
   template:
     metadata:
-      name: app-books
       labels:
         app: app-books
     spec:
+      initContainers:
+        - name: wait-for-consul
+          image: busybox
+          command: ['sh', '-c', 'until wget -qO- http://consul:8500/v1/status/leader; do echo waiting for consul; sleep 2; done;']
+        - name: wait-for-authors
+          image: busybox
+          command: ['sh', '-c', 'until wget -qO- http://app-authors-services:9090/authors; do echo waiting for authors; sleep 2; done;']
       containers:
         - name: app-books
           image: docker.io/willan98/app_books:latest
@@ -133,91 +230,76 @@ spec:
         target:
           type: Utilization
           averageUtilization: 50
-
 ---
+# Vue Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-authors
+  name: app-vue
   labels:
-    app: app-authors
+    app: app-vue
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-authors
+      app: app-vue
   template:
     metadata:
-      name: app-authors
       labels:
-        app: app-authors
+        app: app-vue
     spec:
+      initContainers:
+        - name: wait-for-books
+          image: busybox
+          command: ['sh', '-c', 'until wget -qO- http://app-books-services:8080/books; do echo waiting for books; sleep 2; done;']
       containers:
-        - name: app-authors
-          image: docker.io/willan98/app_authors:latest
+        - name: app-vue
+          image: docker.io/willan98/app_vue:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 9090
+            - containerPort: 8080
               protocol: TCP
           resources:
             requests:
               memory: "64Mi"
               cpu: "250m"
           env:
-            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_SERVERNAME
-              value: 192.168.100.10
-            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_PORTNUMBER
-              value: "5432"
-            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_DATABASENAME
-              value: distribuida
-            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_USER
-              value: postgres
-            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCE_PASSWORD
-              value: rc2ijxxz
-            - name: JAVAX_SQL_DATASOURCE_DS1_DATASOURCECLASSNAME
-              value: org.postgresql.ds.PGSimpleDataSource
-            - name: SERVER_PORT
-              value: "9090"
-            - name: CONSUL_HOST
-              value: consul
-            - name: CONSUL_PORT
-              value: "8500"
+            - name: VUE_APP_HOST
+              value: app-books-services
+            - name: VUE_APP_PORT
+              value: "3001"
+            - name: VUE_APP_PATH
+              value: "books"
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-authors-services
+  name: app-vue-service
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
-    app: app-authors
+    app: app-vue
   ports:
     - protocol: TCP
-      port: 9090
-      targetPort: 9090
+      port: 80
+      targetPort: 8080
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: app-authors-hpa
+  name: app-vue-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: app-authors
+    name: app-vue
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 5
   metrics:
     - type: Resource
       resource:
         name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 50
-    - type: Resource
-      resource:
-        name: memory
         target:
           type: Utilization
           averageUtilization: 50
