@@ -22,7 +22,6 @@ public class BookRepository implements PanacheRepositoryBase<Book, Integer> {
         bookObj.setIsbn(book.getIsbn());
         bookObj.setTitle(book.getTitle());
         bookObj.setPrice(book.getPrice());
-        bookObj.setAuthorId(book.getAuthorId());
         return Optional.of(bookObj);
     }
 

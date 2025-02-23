@@ -66,8 +66,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/io.helidon.fault-tolerance/helidon-fault-tolerance
     implementation("io.helidon.fault-tolerance:helidon-fault-tolerance:4.1.6")
-
-
 }
 
 

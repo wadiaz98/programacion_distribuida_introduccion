@@ -84,7 +84,7 @@ spec:
             - name: QUARKUS_HTTP_CORS
               value: "true"
             - name: QUARKUS_HTTP_CORS_ORIGINS
-              value: "http://localhost:*,http://127.0.0.1:*,http://0.0.0.0:*,http://localhost"
+              value: "http://localhost:*,http://127.0.0.1:*,http://*:*"
             - name: QUARKUS_HTTP_CORS_METHODS
               value: "GET,POST,PUT,DELETE,OPTIONS"
             - name: QUARKUS_HTTP_CORS_HEADERS
@@ -100,7 +100,7 @@ kind: Service
 metadata:
   name: app-books-services
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: app-books
   ports:
